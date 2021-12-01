@@ -1,41 +1,63 @@
 import React from 'react';
 import User from './components/User';
 import FollowerList from './components/FollowerList';
+import axios from 'axios';
 
 import './index.css';
 
 class App extends React.Component {
   state = {
     currentUser: "kevkenshi-max",
-    user: {
-      avatar_url: "https://avatars.githubusercontent.com/u/59786933?v=4",
-      html_url: "https://github.com/kevkenshi-max",
-      name: "Kevin Lee",
-      login: "kevkenshi-max",
-      public_repos: 94,
-      followers: 2,
-    },
-    followers: [
-      {
-        login: "krystleM26",
-        avatar_url: "https://avatars.githubusercontent.com/u/61578720?v=4",
-        html_url: "https://github.com/krystleM26"
-      },
-      { 
-        login: "Jmz0127",
-        avatar_url: "https://avatars.githubusercontent.com/u/45055471?v=4",
-        html_url: "https://github.com/Jmz0127"
-      }
-    ]
+    user: {},
+    followers: []
   }
 
+  componentDidMount() {
+    axios.get(`https://api.github.com/users/${this.state.currentUser}`)
+      .then(resp => {
+        this.setState({
+          ...this.state,
+          user: resp.data
+        });
+      })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.user !== prevState.user) {
+      axios.get(`https://api.github.com/users/${this.state.currentUser}/followers`)
+      .then(resp => {
+        this.setState({
+          ...this.state,
+          followers: resp.data
+        });
+      })
+    }
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      ...this.state,
+      currentUser: e.target.value
+    });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    axios.get(`https://api.github.com/users/${this.state.currentUser}`)
+      .then(resp => {
+        this.setState({
+          ...this.state,
+          user: resp.data
+        });
+      })
+  }
 
   render() {
     return(
     <div>
       <h1>GITHUB INFO</h1>
-      <form>
-        <input placeholder="Github Handle" />
+      <form onSubmit={this.handleSubmit}>
+        <input placeholder="Github Handle" onChange={this.handleChange}/>
         <button>Search</button>
       </form>
 
