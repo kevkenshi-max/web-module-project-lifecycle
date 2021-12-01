@@ -1,6 +1,35 @@
 import React from 'react';
+import User from './components/User';
+import FollowerList from './components/FollowerList';
+
+import './index.css';
 
 class App extends React.Component {
+  state = {
+    currentUser: "kevkenshi-max",
+    user: {
+      avatar_url: "https://avatars.githubusercontent.com/u/59786933?v=4",
+      html_url: "https://github.com/kevkenshi-max",
+      name: "Kevin Lee",
+      login: "kevkenshi-max",
+      public_repos: 94,
+      followers: 2,
+    },
+    followers: [
+      {
+        login: "krystleM26",
+        avatar_url: "https://avatars.githubusercontent.com/u/61578720?v=4",
+        html_url: "https://github.com/krystleM26"
+      },
+      { 
+        login: "Jmz0127",
+        avatar_url: "https://avatars.githubusercontent.com/u/45055471?v=4",
+        html_url: "https://github.com/Jmz0127"
+      }
+    ]
+  }
+
+
   render() {
     return(
     <div>
@@ -10,25 +39,9 @@ class App extends React.Component {
         <button>Search</button>
       </form>
 
-      <div id="UserCard">
-        <img width="400px" src="https://avatars.githubusercontent.com/u/59786933?v=4" />
-        <a target="_blank" href="https://github.com/kevkenshi-max"><h3>Kevin Lee</h3></a>
-        <p>(klee)</p>
-        <p>Total Repos: 94</p>
-        <p>Total Followers: 2</p>
-      </div>
+      <User user={this.state.user}/>
+      <FollowerList followers={this.state.followers}/>
 
-      <div id="followers">
-        <div className="follower">
-          <img width="200px" src="https://avatars.githubusercontent.com/u/45055471?v=4" />
-          <a target="_blank" href="https://github.com/Jmz0127"><p>Jmz0127</p></a>
-        </div>
-        <div className="follower">
-          <img width="200px" src="https://avatars.githubusercontent.com/u/61578720?v=4" />
-          <a target="_blank" href="https://github.com/krystleM26"><p>krystleM26</p></a>
-        </div>
-
-      </div>
 
     </div>);
   }
